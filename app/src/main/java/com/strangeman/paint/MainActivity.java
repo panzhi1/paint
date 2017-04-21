@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
       PointView pointView;
       LineView  lineView;
+      BezierView bezierView;
+
       XYDate xyDate;
       Point point;
 
