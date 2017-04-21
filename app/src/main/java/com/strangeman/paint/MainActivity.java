@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       Stack<View> viewStack;
       Stack<View> temporaryStack;
       RelativeLayout layout ;
+
       PointView pointView;
       LineView  lineView;
       XYDate xyDate;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         point.setOnClickListener(this);
         Button line=(Button)findViewById(R.id.line);
         line.setOnClickListener(this);
+        Button bezier=(Button)findViewById(R.id.bezier) ;
+        bezier.setOnClickListener(this);
         Button back=(Button)findViewById(R.id.back);
         back.setOnClickListener(this);
         Button recovery =(Button)findViewById(R.id.recovery);
@@ -63,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.line:
                 type=1;
+                break;
+            case R.id.bezier:
+                type=2;
                 break;
             case R.id.back:
                 back();
@@ -102,73 +108,97 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-               if (type == 0) {
-                   switch (event.getAction()) {
-                       case  MotionEvent.ACTION_DOWN:
+        switch (type) {
+            case 0:
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
                         point = new Point();
-                       int X = (int) event.getX();
-                       int Y = (int) event.getY();
-                       point.x = X;
-                       point.y = Y;
-                       pointView = new PointView(this, point);
-                       viewStack.push(pointView) ;
-                       layout.addView(pointView);
-                           break;
-                       case MotionEvent.ACTION_MOVE:
-                           pointView.invalidate();
-                           int X1 = (int) event.getX();
-                           int Y1 = (int) event.getY();
-                           point.x = X1;
-                           point.y = Y1;
-                           break;
-                       case MotionEvent.ACTION_UP:
-                           pointView.invalidate();
-                           int X2 = (int) event.getX();
-                           int Y2 = (int) event.getY();
-                           point.x = X2;
-                           point.y = Y2;
-                   }
-               }
-        if(type==1){
-            switch (event.getAction()){
-                case  MotionEvent.ACTION_DOWN:
-                    xyDate=new XYDate();
-                    typePaint=0;
-                    int x1=(int)event.getX();
-                    int y1=(int)event.getY();
-                    xyDate.setX1(x1);
-                    xyDate.setY1(y1);
-                    xyDate.setX2(x1);
-                    xyDate.setY2(y1);
-                    lineView=new LineView(this,xyDate,typePaint);
-                    layout.addView(lineView);
-                    break;
+                        int X = (int) event.getX();
+                        int Y = (int) event.getY();
+                        point.x = X;
+                        point.y = Y;
+                        pointView = new PointView(this, point);
+                        viewStack.push(pointView);
+                        layout.addView(pointView);
+                        break;
+                    case MotionEvent.ACTION_MOVE:
 
-                case MotionEvent.ACTION_MOVE:
-                    lineView.invalidate();
-                    int x2=(int)event.getX();
-                    int y2=(int)event.getY();
-                    xyDate.setX2(x2);
-                    xyDate.setY2(y2);
-                    typePaint=1;
-                    break;
+                        int x1 = (int) event.getX();
+                        int y1 = (int) event.getY();
+                        pointView.setPointPoint(x1,y1);
+                        break;
+                    case MotionEvent.ACTION_UP:
 
-                case MotionEvent.ACTION_UP:
-                    typePaint=1;
-                    lineView.invalidate();
-                    int x3=(int)event.getX();
-                    int y3=(int)event.getY();
-                    xyDate.setX2(x3);
-                    xyDate.setY2(y3);
-                    lineView.setType(typePaint);
-                    viewStack.push(lineView);
-                    break;
+                        int x2 = (int) event.getX();
+                        int y2 = (int) event.getY();
+                        pointView.setPointPoint(x2,y2);
+                }
+                break;
+            case 1:
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        xyDate = new XYDate();
+                        typePaint = 0;
+                        int x1 = (int) event.getX();
+                        int y1 = (int) event.getY();
+                        xyDate.setX1(x1);
+                        xyDate.setY1(y1);
+                        xyDate.setX2(x1);
+                        xyDate.setY2(y1);
+                        lineView = new LineView(this, xyDate, typePaint);
+                        layout.addView(lineView);
+                        break;
 
-            }
+                    case MotionEvent.ACTION_MOVE:
+
+                        int x2 = (int) event.getX();
+                        int y2 = (int) event.getY();
+                        lineView.setLinePoint(x2,y2,0);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+
+                        int x3 = (int) event.getX();
+                        int y3 = (int) event.getY();
+                        lineView.setLinePoint(x3,y3,1);
+                        viewStack.push(lineView);
+                        break;
+
+                }
+                break;
+            case 2:
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        xyDate = new XYDate();
+                        int x1 = (int) event.getX();
+                        int y1 = (int) event.getY();
+                        bezierView = new BezierView(this);
+                        bezierView.setBezierPoint(x1,y1);
+                        layout.addView(bezierView);
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+
+                        int x2 = (int) event.getX();
+                        int y2 = (int) event.getY();
+                        bezierView.setBezierPoint(x2,y2);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+
+                        int x3 = (int) event.getX();
+                        int y3 = (int) event.getY();
+                        bezierView.setBezierPoint(x3,y3);
+                        //lineView.setType(typePaint);
+                       viewStack.push(bezierView);
+                        break;
+
+                }
+                break;
         }
         return true;
-
     }
+
 }
 
 

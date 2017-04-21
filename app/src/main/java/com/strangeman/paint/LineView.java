@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PathEffect;
+
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -37,12 +37,6 @@ public class LineView extends View {
         super.onLayout(changed, left, top, right, bottom);
     }
 
-    public int getType(){
-        return this.type;
-    }
-    public void setType(int type){
-        this.type=type;
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -74,4 +68,10 @@ public class LineView extends View {
         }
     }
 
+    public void setLinePoint(int x,int y,int typePaint){
+        xyDate.setX2(x);
+        xyDate.setY2(y);
+        this.type=typePaint;
+        invalidate();
+    }
 }

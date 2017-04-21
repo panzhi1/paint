@@ -30,6 +30,13 @@
         android:id="@+id/back"
         />
     <Button
+        android:id="@+id/bezier"
+        android:text="画曲线"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        />
+    <Button
         android:text="恢复"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

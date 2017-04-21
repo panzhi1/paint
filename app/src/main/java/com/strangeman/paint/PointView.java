@@ -42,7 +42,11 @@ public class PointView extends View {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.RED);
         canvas.drawCircle(point.x, point.y, 8, paint);
+    }
 
-
+    public void setPointPoint(int x,int y){
+        point.x=x;
+        point.y=y;
+        invalidate();
     }
 }
